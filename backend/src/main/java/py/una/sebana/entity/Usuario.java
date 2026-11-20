@@ -10,8 +10,8 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String username;
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
 
     @Column(name = "password_hash", nullable = false, length = 100)
     private String passwordHash;
@@ -33,15 +33,15 @@ public class Usuario {
         // JPA exige un constructor sin argumentos para instanciar la entidad al leerla de la BD
     }
 
-    public Usuario(String username, String passwordHash, String nombreCompleto, Rol rol) {
-        this.username = username;
+    public Usuario(String email, String passwordHash, String nombreCompleto, Rol rol) {
+        this.email = email;
         this.passwordHash = passwordHash;
         this.nombreCompleto = nombreCompleto;
         this.rol = rol;
     }
 
     public Integer getId() { return id; }
-    public String getUsername() { return username; }
+    public String getEmail() { return email; }
     public String getPasswordHash() { return passwordHash; }
     public String getNombreCompleto() { return nombreCompleto; }
     public Rol getRol() { return rol; }

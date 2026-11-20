@@ -17,11 +17,11 @@ public class UsuarioDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username) // trae el rol con JOIN (@EntityGraph)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
-        return User.withUsername(usuario.getUsername())
+        return User.withUsername(usuario.getEmail())
                 .password(usuario.getPasswordHash())
                 .roles(usuario.getRol().getNombre())
                 .disabled(!usuario.isActivo())

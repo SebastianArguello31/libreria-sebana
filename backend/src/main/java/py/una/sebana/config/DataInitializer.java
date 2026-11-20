@@ -34,21 +34,20 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        crearSiNoExiste("admin", props.seed().adminPassword(), "Administrador Sebana", Rol.ADMIN);
-        crearSiNoExiste("lector", props.seed().usuarioPassword(), "Lector de Prueba", Rol.USUARIO);
+        crearSiNoExiste("admin@sebana.com", props.seed().adminPassword(), "Administrador Sebana", Rol.ADMIN);
+        crearSiNoExiste("lector@sebana.com", props.seed().usuarioPassword(), "Lector de Prueba", Rol.USUARIO);
     }
 
-    private void crearSiNoExiste(String username, String password, String nombreCompleto, String nombreRol) {
-        if (usuarioRepository.existsByUsername(username)) {
+    private void crearSiNoExiste(String email, String password, String nombreCompleto, String nombreRol) {
+        if (usuarioRepository.existsByEmail(email)) {
             return;
         }
 
         Rol rol = rolRepository.findByNombre(nombreRol)
-                .orElseThrow(() -> new IllegalStateException("No existe el rol " + nombreRol + ". ¿Se aplicó la migración V1?"));
+                .orElseThrow(() -> new IllegalStateException(
+                        "No existe el rol " + nombreRol + ". ¿Se aplicó la migración V1?"));
 
-        String hash = passwordEncoder.encode(password);
-        usuarioRepository.save(new Usuario(username, hash, nombreCompleto, rol));
-
-        log.info("Usuario inicial creado: {} ({})", username, nombreRol);
+        usuarioRepository.save(new Usuario(email, passwordEncoder.encode(password), nombreCompleto, rol));
+        log.info("Usuario inicial creado: {} ({})", email, nombreRol);
     }
 }

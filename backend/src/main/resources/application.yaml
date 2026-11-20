@@ -17,6 +17,7 @@ spring:
 
   flyway:
     enabled: true
+    validate-migration-naming: true
 
 server:
   port: 8080

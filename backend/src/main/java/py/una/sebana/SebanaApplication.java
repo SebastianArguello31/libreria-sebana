@@ -2,12 +2,12 @@ package py.una.sebana;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-public class BackendApplication {
-
+@ConfigurationPropertiesScan
+public class SebanaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+        SpringApplication.run(SebanaApplication.class, args);
     }
-
 }

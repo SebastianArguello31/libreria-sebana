@@ -1,3 +1,33 @@
 spring:
   application:
-    name: backend
+    name: sebana-api
+
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    validate-migration-naming: true
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 2h
+  cors:
+    allowed-origin: ${CORS_ORIGIN:http://localhost:4200}
+  seed:
+    admin-password: ${ADMIN_PASSWORD}
+    usuario-password: ${USUARIO_PASSWORD}

@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --tinta: #1b1b1b;
+  --tinta-suave: #5f5a52;
+  --papel: #f7f4ee;
+  --linea: #c9c2b6;
+  --verde: #1e3a2f;
+  --verde-claro: #2c5242;
+  --error: #9b2c2c;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--tinta);
+  background: var(--papel);
+}

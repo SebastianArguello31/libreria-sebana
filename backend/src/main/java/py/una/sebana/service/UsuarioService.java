@@ -15,6 +15,7 @@ import py.una.sebana.exception.RecursoNoEncontradoException;
 import py.una.sebana.repository.RolRepository;
 import py.una.sebana.repository.UsuarioRepository;
 import py.una.sebana.repository.UsuarioSpecs;
+import py.una.sebana.dto.PasswordRestablecerRequest
 
 import java.util.Locale;
 
@@ -120,5 +121,11 @@ public class UsuarioService {
 
     private String normalizarEmail(String email) {
         return email.trim().toLowerCase(Locale.ROOT);
+    }
+
+    @Transactional
+    public void restablecerPassword(Integer id, PasswordRestablecerRequest request) {
+        Usuario usuario = buscar(id);
+        usuario.setPasswordHash(passwordEncoder.encode(request.password()));
     }
 }

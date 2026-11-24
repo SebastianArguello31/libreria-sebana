@@ -55,4 +55,19 @@ public class AuthController {
     public UsuarioResponse me(@AuthenticationPrincipal Jwt jwt) {
         return authService.buscarPorEmail(jwt.getSubject());
     }
+
+    @PutMapping("/me/password")
+    @Operation(summary = "Cambiar mi contraseña", description = "Requiere la contraseña actual.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Contraseña actualizada"),
+            @ApiResponse(responseCode = "400", description = "Contraseña actual incorrecta o nueva inválida",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Token ausente, inválido o expirado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> cambiarPassword(@AuthenticationPrincipal Jwt jwt,
+                                                @Valid @RequestBody PasswordCambiarRequest request) {
+        authService.cambiarPassword(jwt.getSubject(), request);
+        return ResponseEntity.noContent().build();
+    }
 }

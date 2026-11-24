@@ -102,4 +102,19 @@ public class UsuarioController {
                                          @AuthenticationPrincipal Jwt jwt) {
         return usuarioService.cambiarEstado(id, request.activo(), jwt.getSubject());
     }
+
+    @PutMapping("/{id}/password")
+    @Operation(summary = "Restablecer contraseña", description = "El administrador asigna una contraseña nueva sin conocer la anterior.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Contraseña actualizada"),
+            @ApiResponse(responseCode = "400", description = "Contraseña inválida",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "No existe el usuario",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> restablecerPassword(@PathVariable Integer id,
+                                                    @Valid @RequestBody PasswordRestablecerRequest request) {
+        usuarioService.restablecerPassword(id, request);
+        return ResponseEntity.noContent().build();
+    }
 }

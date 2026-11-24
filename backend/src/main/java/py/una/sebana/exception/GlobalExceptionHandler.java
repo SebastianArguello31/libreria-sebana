@@ -37,6 +37,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(CampoInvalidoException.class)
+    public ResponseEntity<ErrorResponse> campoInvalido(CampoInvalidoException ex, HttpServletRequest request) {
+        ErrorResponse body = new ErrorResponse(Instant.now(), 400, "Bad Request", "Datos de entrada inválidos",
+                request.getRequestURI(), Map.of(ex.getCampo(), ex.getMessage()));
+        return ResponseEntity.badRequest().body(body);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> jsonInvalido(HttpServletRequest request) {
         return respuesta(HttpStatus.BAD_REQUEST, "El cuerpo de la petición falta o no es un JSON válido", request);

@@ -100,4 +100,12 @@ public class LibroService {
         }
         return valor.trim();
     }
+
+    @Transactional(readOnly = true)
+    public List<LibroResponse> listarActivos() {
+        return libroRepository.findAllByActivoTrueOrderByTituloAsc()
+                .stream()
+                .map(LibroResponse::from)
+                .toList();
+    }
 }

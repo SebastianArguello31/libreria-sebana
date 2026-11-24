@@ -5,6 +5,7 @@
     <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
     @if (esAdmin()) {
       <a routerLink="/usuarios" routerLinkActive="activo">Usuarios</a>
+      <a routerLink="/libros" routerLinkActive="activo">Libros</a>
     }
     <a routerLink="/mi-cuenta" routerLinkActive="activo">Mi cuenta</a>
   </nav>

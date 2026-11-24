@@ -33,76 +33,8 @@ h1 {
 
 label {
   margin-top: 1rem;
-  margin-bottom: 0.35rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--tinta-suave);
-}
-
-input {
-  padding: 0.6rem 0.7rem;
-  border: 1px solid var(--linea);
-  border-radius: 8px;
-  background: var(--papel);
-  font: inherit;
-  color: var(--tinta);
-
-  &:focus {
-    outline: none;
-    border-color: var(--verde);
-    box-shadow: inset 0 0 0 1px var(--verde);
-    background: #fff;
-  }
-
-  &.invalido {
-    border-color: var(--error);
-  }
-}
-
-.error-campo {
-  margin-top: 0.3rem;
-  font-size: 0.8rem;
-  color: var(--error);
-}
-
-.alerta {
-  margin: 1.5rem 0 0;
-  padding: 0.6rem 0.75rem;
-  border-left: 3px solid var(--error);
-  border-radius: 0 8px 8px 0;
-  background: #f6e8e6;
-  font-size: 0.875rem;
-  color: var(--error);
 }
 
 button {
   margin-top: 1.75rem;
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--verde);
-  border-radius: 8px;
-  background: var(--verde);
-  color: var(--papel);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    background: var(--verde-claro);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: progress;
-  }
-
-  &.secundario {
-    background: transparent;
-    color: var(--verde);
-
-    &:hover {
-      background: rgb(30 58 47 / 6%);
-    }
-  }
 }

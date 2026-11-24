@@ -1,35 +1,99 @@
-.encabezado {
+.migas {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+
+  a {
+    color: var(--verde);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.encabezado {
   margin-bottom: 1.5rem;
 
   h1 {
     margin: 0;
     font-family: var(--serif);
+    font-size: 2rem;
     font-weight: normal;
   }
 }
 
-.volver {
-  color: var(--verde);
-  font-size: 0.9rem;
-  text-decoration: none;
+.subtitulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: var(--tinta-suave);
+}
 
-  &:hover {
-    text-decoration: underline;
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  &::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #b5ada0;
+  }
+
+  &.activo {
+    color: var(--verde);
+
+    &::before {
+      background: #3f8f63;
+    }
   }
 }
 
 .tarjeta {
-  max-width: 560px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  padding: 2rem;
+  max-width: 860px;
   border: 1px solid var(--linea);
   border-radius: 14px;
   background: #fff;
+  overflow: hidden;
+}
+
+.seccion {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid #ebe6dd;
+}
+
+.seccion-titulo {
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--tinta-suave);
+  }
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  min-width: 0;
 }
 
 .campo {
@@ -37,23 +101,140 @@
   flex-direction: column;
 }
 
+// ---------- Tarjetas de rol ----------
+.roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.opcion-rol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.9rem 1rem 0.9rem 2.6rem;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  background: var(--papel);
+  font-size: 0.9rem;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--tinta);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+
+  input {
+    position: absolute;
+    top: 1.05rem;
+    left: 1rem;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    accent-color: var(--verde);
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .titulo {
+    font-weight: 600;
+  }
+
+  .descripcion {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--tinta-suave);
+  }
+
+  &:hover {
+    border-color: #a89f90;
+  }
+
+  &:has(input:checked) {
+    border-color: var(--verde);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--verde);
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--verde);
+    outline-offset: 2px;
+  }
+
+  &:has(input:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// ---------- Contraseña con botón ----------
+.con-boton {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 5.5rem;
+  }
+
+  .ver {
+    position: absolute;
+    top: 50%;
+    right: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--verde);
+    font-size: 0.8rem;
+    transform: translateY(-50%);
+
+    &:hover:not(:disabled) {
+      background: #eee9e0;
+    }
+  }
+}
+
 .nota {
-  margin: 0.3rem 0 0;
+  margin: 0.35rem 0 0;
   font-size: 0.8rem;
   color: var(--tinta-suave);
 }
 
 .alerta {
-  margin: 0;
+  margin: 1.25rem 2rem 0;
 }
 
 .acciones {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
-  margin-top: 0.5rem;
+  padding: 1.1rem 2rem;
+  background: var(--papel);
 }
 
 .ayuda {
   color: var(--tinta-suave);
+}
+
+// ---------- Pantallas angostas ----------
+@media (max-width: 720px) {
+  .seccion {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .roles {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones {
+    padding: 1rem 1.5rem;
+  }
 }

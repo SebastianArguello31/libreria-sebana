@@ -1,19 +1,26 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Rol } from '../../../core/models/auth.models';
+import { Rol, Usuario } from '../../../core/models/auth.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { erroresDeCampos, mensajeDeError } from '../../../core/utils/errores';
 
 type Campo = 'email' | 'nombreCompleto' | 'rol' | 'password';
 
+interface OpcionRol {
+  valor: Rol;
+  titulo: string;
+  descripcion: string;
+}
+
 @Component({
   selector: 'app-usuario-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, DatePipe],
   templateUrl: './usuario-form.html',
   styleUrl: './usuario-form.scss',
 })
@@ -23,10 +30,17 @@ export class UsuarioForm implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
-
   readonly id = input<string>();
   readonly esEdicion = computed(() => this.id() !== undefined);
   readonly esUnoMismo = computed(() => this.esEdicion() && Number(this.id()) === this.auth.usuario()?.id);
+
+  readonly opcionesRol: OpcionRol[] = [
+    { valor: 'USUARIO', titulo: 'Socio lector', descripcion: 'Consulta el catálogo y sus propios préstamos.' },
+    { valor: 'ADMIN', titulo: 'Administrador', descripcion: 'Gestiona usuarios, libros y préstamos.' },
+  ];
+
+  readonly usuario = signal<Usuario | null>(null);
+  readonly mostrarPassword = signal(false);
   readonly cargando = signal(false);
   readonly cargaFallida = signal(false);
   readonly guardando = signal(false);
@@ -48,19 +62,20 @@ export class UsuarioForm implements OnInit {
     if (!this.esEdicion()) return;
 
     this.form.controls.password.disable();
-
     if (this.esUnoMismo()) {
       this.form.controls.email.disable();
       this.form.controls.rol.disable();
     }
 
     this.cargando.set(true);
-
     this.usuarios
       .obtener(Number(this.id()))
       .pipe(finalize(() => this.cargando.set(false)))
       .subscribe({
-        next: (u) => this.form.patchValue({ email: u.email, nombreCompleto: u.nombreCompleto, rol: u.rol }),
+        next: (u) => {
+          this.usuario.set(u);
+          this.form.patchValue({ email: u.email, nombreCompleto: u.nombreCompleto, rol: u.rol });
+        },
         error: (err: HttpErrorResponse) => {
           this.cargaFallida.set(true);
           this.error.set(mensajeDeError(err));

@@ -32,11 +32,7 @@ export class UsuariosLista {
   readonly resultado = signal<Pagina<Usuario> | null>(null);
   readonly cargando = signal(false);
   readonly error = signal<string | null>(null);
-
-  /** Mensaje de éxito: llega del formulario (router state) o lo ponen las acciones de la tabla. */
   readonly aviso = signal<string | null>(history.state?.mensaje ?? null);
-
-  /** Id del usuario sobre el que hay una acción en curso, para deshabilitar sus botones. */
   readonly procesando = signal<number | null>(null);
 
   readonly form = this.fb.nonNullable.group({
@@ -45,7 +41,6 @@ export class UsuariosLista {
     activo: this.fb.nonNullable.control<'' | 'true' | 'false'>(''),
   });
 
-  // Diálogo para restablecer contraseña
   private readonly dialogo = viewChild.required<ElementRef<HTMLDialogElement>>('dialogoPassword');
   readonly usuarioPassword = signal<Usuario | null>(null);
   readonly errorPassword = signal<string | null>(null);
@@ -85,6 +80,10 @@ export class UsuariosLista {
   irAPagina(numero: number): void {
     this.pagina.set(numero);
     this.recargar$.next();
+  }
+
+  iniciales(nombre: string): string {
+    return nombre.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
   }
 
   cambiarEstado(u: Usuario): void {

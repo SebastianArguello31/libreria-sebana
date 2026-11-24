@@ -61,6 +61,11 @@ public class GlobalExceptionHandler {
         return respuesta(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ConflictoException.class)
+    public ResponseEntity<ErrorResponse> conflictoDeNegocio(ConflictoException ex, HttpServletRequest request) {
+        return respuesta(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> rutaInexistente(HttpServletRequest request) {
         return respuesta(HttpStatus.NOT_FOUND, "La ruta solicitada no existe", request);

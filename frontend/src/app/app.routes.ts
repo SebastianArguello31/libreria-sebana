@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './core/guards/auth.guards';
+import { authGuard, guestGuard, rolGuard } from './core/guards/auth.guards';
 
 export const routes: Routes = [
   {
@@ -19,6 +19,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/inicio/inicio').then((m) => m.Inicio),
       },
     ],
+  },
+  {
+    path: 'usuarios',
+    canActivate: [rolGuard('ADMIN')],
+    loadChildren: () => import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
   },
   { path: '**', redirectTo: '' },
 ];

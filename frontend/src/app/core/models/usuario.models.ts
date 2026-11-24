@@ -26,3 +26,8 @@ export interface PasswordCambiar {
   passwordActual: string;
   passwordNueva: string;
 }
+
+export const ETIQUETA_ROL: Record<Rol, string> = {
+  ADMIN: 'Administrador',
+  USUARIO: 'Socio lector',
+};

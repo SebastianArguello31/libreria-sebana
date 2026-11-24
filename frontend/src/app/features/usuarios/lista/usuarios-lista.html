@@ -1,0 +1,79 @@
+<header class="encabezado">
+  <h1>Usuarios</h1>
+</header>
+
+<form class="filtros" [formGroup]="form">
+  <div class="campo">
+    <label for="texto">Buscar</label>
+    <input id="texto" type="search" formControlName="texto" placeholder="Nombre o email" />
+  </div>
+  <div class="campo">
+    <label for="rol">Rol</label>
+    <select id="rol" formControlName="rol">
+      <option value="">Todos</option>
+      <option value="ADMIN">Administrador</option>
+      <option value="USUARIO">Socio lector</option>
+    </select>
+  </div>
+  <div class="campo">
+    <label for="activo">Estado</label>
+    <select id="activo" formControlName="activo">
+      <option value="">Todos</option>
+      <option value="true">Activos</option>
+      <option value="false">Inactivos</option>
+    </select>
+  </div>
+</form>
+
+@if (error(); as mensaje) {
+  <p class="alerta" role="alert">{{ mensaje }}</p>
+}
+
+@if (resultado(); as r) {
+  <table [class.cargando]="cargando()">
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Estado</th>
+      <th>Alta</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (u of r.content; track u.id) {
+        <tr [class.inactivo]="!u.activo">
+          <td>{{ u.nombreCompleto }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ etiquetaRol[u.rol] }}</td>
+          <td>
+            <span class="estado" [class.activo]="u.activo">{{ u.activo ? 'Activo' : 'Inactivo' }}</span>
+          </td>
+          <td>{{ u.creadoEn | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="vacio">No hay usuarios que coincidan con los filtros.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (r.page.totalPages > 1) {
+    <nav class="paginacion" aria-label="Paginación">
+      <button type="button" class="secundario"
+              [disabled]="r.page.number === 0 || cargando()"
+              (click)="irAPagina(r.page.number - 1)">
+        Anterior
+      </button>
+      <span>Página {{ r.page.number + 1 }} de {{ r.page.totalPages }} · {{ r.page.totalElements }} usuarios</span>
+      <button type="button" class="secundario"
+              [disabled]="r.page.number + 1 >= r.page.totalPages || cargando()"
+              (click)="irAPagina(r.page.number + 1)">
+        Siguiente
+      </button>
+    </nav>
+  }
+} @else if (cargando()) {
+  <p class="ayuda">Cargando usuarios…</p>
+}

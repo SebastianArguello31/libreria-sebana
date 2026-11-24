@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorResponse } from '../../../core/models/auth.models';
+import { mensajeDeError } from '../../../core/utils/errores';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +15,10 @@ import { ErrorResponse } from '../../../core/models/auth.models';
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
 
-  readonly usuario = this.auth.usuario;
+  readonly returnUrl = input<string>();
+
   readonly cargando = signal(false);
   readonly error = signal<string | null>(null);
   readonly form = this.fb.nonNullable.group({
@@ -36,13 +39,9 @@ export class Login {
       .login(this.form.getRawValue())
       .pipe(finalize(() => this.cargando.set(false)))
       .subscribe({
-        next: () => this.form.reset(),
-        error: (err: HttpErrorResponse) => this.error.set(this.mensajeDeError(err)),
+        next: () => this.router.navigateByUrl(this.destinoSeguro()),
+        error: (err: HttpErrorResponse) => this.error.set(mensajeDeError(err)),
       });
-  }
-
-  cerrarSesion(): void {
-    this.auth.logout();
   }
 
   campoInvalido(campo: 'email' | 'password'): boolean {
@@ -50,14 +49,9 @@ export class Login {
     return control.invalid && control.touched;
   }
 
-  private mensajeDeError(err: HttpErrorResponse): string {
-    if (err.status === 0) {
-      return 'No se pudo conectar con el servidor. Verificá que la API esté en ejecución.';
-    }
-    const body = err.error as ErrorResponse | null;
-    if (err.status === 400 && body?.campos) {
-      return Object.values(body.campos).join('. ');
-    }
-    return body?.mensaje ?? 'Ocurrió un error inesperado. Intentá de nuevo.';
+  private destinoSeguro(): string {
+    const url = this.returnUrl();
+    // Solo rutas internas: evita redirecciones a otro sitio con ?returnUrl=//sitio-malicioso.com
+    return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
   }
 }

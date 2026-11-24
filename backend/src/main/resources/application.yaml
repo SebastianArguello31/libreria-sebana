@@ -19,6 +19,11 @@ spring:
     enabled: true
     validate-migration-naming: true
 
+  data:
+    web:
+      pageable:
+        serialization-mode: via-dto
+        max-page-size: 50
 server:
   port: 8080
 

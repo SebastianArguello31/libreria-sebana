@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse, Rol, Usuario } from '../models/auth.models';
+import { PasswordCambiar } from '../models/usuario.models';
 
 interface Sesion {
   token: string;
@@ -35,6 +36,10 @@ export class AuthService {
     sessionStorage.removeItem(STORAGE_KEY);
     this.sesion.set(null);
     this.router.navigate(['/login']);
+  }
+
+  cambiarPassword(datos: PasswordCambiar): Observable<void> {
+    return this.http.put<void>(`${this.url}/me/password`, datos);
   }
 
   getToken(): string | null {

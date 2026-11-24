@@ -10,6 +10,8 @@ export interface Usuario {
   email: string;
   nombreCompleto: string;
   rol: Rol;
+  activo: boolean;
+  creadoEn: string;
 }
 
 export interface LoginResponse {

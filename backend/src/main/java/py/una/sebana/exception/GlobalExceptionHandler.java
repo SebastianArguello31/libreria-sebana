@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.data.core.PropertyReferenceException;
 import py.una.sebana.dto.ErrorResponse;
 
 import java.time.Instant;
@@ -33,6 +34,13 @@ public class GlobalExceptionHandler {
                 .forEach(error -> campos.putIfAbsent(error.getField(), error.getDefaultMessage()));
 
         ErrorResponse body = new ErrorResponse(Instant.now(), 400, "Bad Request", "Datos de entrada inválidos", request.getRequestURI(), campos);
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(CampoInvalidoException.class)
+    public ResponseEntity<ErrorResponse> campoInvalido(CampoInvalidoException ex, HttpServletRequest request) {
+        ErrorResponse body = new ErrorResponse(Instant.now(), 400, "Bad Request", "Datos de entrada inválidos",
+                request.getRequestURI(), Map.of(ex.getCampo(), ex.getMessage()));
         return ResponseEntity.badRequest().body(body);
     }
 
@@ -61,6 +69,11 @@ public class GlobalExceptionHandler {
         return respuesta(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ConflictoException.class)
+    public ResponseEntity<ErrorResponse> conflictoDeNegocio(ConflictoException ex, HttpServletRequest request) {
+        return respuesta(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> rutaInexistente(HttpServletRequest request) {
         return respuesta(HttpStatus.NOT_FOUND, "La ruta solicitada no existe", request);
@@ -86,5 +99,10 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponse> respuesta(HttpStatus status, String mensaje, HttpServletRequest request) {
         ErrorResponse body = ErrorResponse.of(status.value(), status.getReasonPhrase(), mensaje, request.getRequestURI());
         return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> ordenInvalido(PropertyReferenceException ex, HttpServletRequest request) {
+        return respuesta(HttpStatus.BAD_REQUEST, "No se puede ordenar por '" + ex.getPropertyName() + "'", request);
     }
 }

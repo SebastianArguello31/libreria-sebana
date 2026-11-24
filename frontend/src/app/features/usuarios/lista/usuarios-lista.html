@@ -1,0 +1,156 @@
+<header class="encabezado">
+  <div>
+    <h1>Usuarios</h1>
+    <p class="subtitulo">Cuentas de socios lectores y administradores de la biblioteca.</p>
+  </div>
+  <button type="button" class="nuevo" routerLink="/usuarios/nuevo">+ Nuevo usuario</button>
+</header>
+
+@if (aviso(); as mensaje) {
+  <p class="alerta exito" role="status">{{ mensaje }}</p>
+}
+@if (error(); as mensaje) {
+  <p class="alerta" role="alert">{{ mensaje }}</p>
+}
+
+<section class="panel">
+  <form class="filtros" [formGroup]="form">
+    <div class="buscador">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" stroke-linecap="round" />
+      </svg>
+      <input type="search" formControlName="texto" placeholder="Buscar por nombre o email"
+             aria-label="Buscar usuarios" />
+    </div>
+    <select formControlName="rol" aria-label="Filtrar por rol">
+      <option value="">Todos los roles</option>
+      <option value="ADMIN">Administrador</option>
+      <option value="USUARIO">Socio lector</option>
+    </select>
+    <select formControlName="activo" aria-label="Filtrar por estado">
+      <option value="">Todos los estados</option>
+      <option value="true">Activos</option>
+      <option value="false">Inactivos</option>
+    </select>
+  </form>
+
+  @if (resultado(); as r) {
+    <div class="tabla-scroll">
+      <table [class.cargando]="cargando()">
+        <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Alta</th>
+          <th><span class="sr-only">Acciones</span></th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (u of r.content; track u.id) {
+            <tr [class.inactivo]="!u.activo">
+              <td>
+                <div class="persona">
+                  <span class="avatar" [class.admin]="u.rol === 'ADMIN'" aria-hidden="true">
+                    {{ iniciales(u.nombreCompleto) }}
+                  </span>
+                  <div>
+                    <span class="nombre">
+                      {{ u.nombreCompleto }}
+                      @if (u.id === idActual()) {
+                        <span class="vos">Vos</span>
+                      }
+                    </span>
+                    <span class="email">{{ u.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="rol" [class.admin]="u.rol === 'ADMIN'">{{ etiquetaRol[u.rol] }}</span>
+              </td>
+              <td>
+                <span class="estado" [class.activo]="u.activo">{{ u.activo ? 'Activo' : 'Inactivo' }}</span>
+              </td>
+              <td class="fecha">{{ u.creadoEn | date: 'dd/MM/yyyy' }}</td>
+              <td class="acciones">
+                <a class="accion" [routerLink]="['/usuarios', u.id]">Editar</a>
+                <button type="button" class="accion"
+                        [disabled]="procesando() === u.id"
+                        (click)="abrirPassword(u)">
+                  Contraseña
+                </button>
+                @if (u.id !== idActual()) {
+                  <button type="button" class="accion" [class.peligro]="u.activo"
+                          [disabled]="procesando() === u.id"
+                          (click)="cambiarEstado(u)">
+                    {{ u.activo ? 'Desactivar' : 'Activar' }}
+                  </button>
+                } @else {
+                  <span class="accion reservado" aria-hidden="true">Desactivar</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">
+                <div class="vacio">
+                  <strong>No se encontraron usuarios</strong>
+                  <span>Probá con otro texto de búsqueda o cambiá los filtros.</span>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="pie">
+      <span>{{ r.page.totalElements }} {{ r.page.totalElements === 1 ? 'usuario' : 'usuarios' }}</span>
+      @if (r.page.totalPages > 1) {
+        <nav class="paginacion" aria-label="Paginación">
+          <button type="button" class="secundario"
+                  [disabled]="r.page.number === 0 || cargando()"
+                  (click)="irAPagina(r.page.number - 1)">
+            ← Anterior
+          </button>
+          <span>Página {{ r.page.number + 1 }} de {{ r.page.totalPages }}</span>
+          <button type="button" class="secundario"
+                  [disabled]="r.page.number + 1 >= r.page.totalPages || cargando()"
+                  (click)="irAPagina(r.page.number + 1)">
+            Siguiente →
+          </button>
+        </nav>
+      }
+    </footer>
+  } @else if (cargando()) {
+    <p class="cargando-texto">Cargando usuarios…</p>
+  }
+</section>
+
+<dialog #dialogoPassword class="dialogo" (close)="usuarioPassword.set(null)">
+  @if (usuarioPassword(); as u) {
+    <form [formGroup]="passwordForm" (ngSubmit)="guardarPassword()" novalidate>
+      <h2>Restablecer contraseña</h2>
+      <p class="ayuda">Nueva contraseña para {{ u.nombreCompleto }} ({{ u.email }}).</p>
+
+      <label for="nuevaPassword">Nueva contraseña</label>
+      <input id="nuevaPassword" type="password" formControlName="password" autocomplete="new-password"
+             [class.invalido]="passwordInvalida()" />
+      @if (passwordInvalida()) {
+        <small class="error-campo">Debe tener entre 8 y 72 caracteres.</small>
+      }
+
+      @if (errorPassword(); as mensaje) {
+        <p class="alerta" role="alert">{{ mensaje }}</p>
+      }
+
+      <div class="botones">
+        <button type="button" class="secundario" (click)="cerrarPassword()">Cancelar</button>
+        <button type="submit" [disabled]="procesando() === u.id">
+          {{ procesando() === u.id ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</dialog>

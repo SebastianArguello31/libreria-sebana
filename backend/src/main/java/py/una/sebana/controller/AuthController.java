@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PutMapping;
 import py.una.sebana.dto.ErrorResponse;
 import py.una.sebana.dto.LoginRequest;
 import py.una.sebana.dto.LoginResponse;
 import py.una.sebana.dto.UsuarioResponse;
+import py.una.sebana.dto.PasswordCambiarRequest;
 import py.una.sebana.service.AuthService;
 
 @RestController
@@ -54,5 +57,20 @@ public class AuthController {
     })
     public UsuarioResponse me(@AuthenticationPrincipal Jwt jwt) {
         return authService.buscarPorEmail(jwt.getSubject());
+    }
+
+    @PutMapping("/me/password")
+    @Operation(summary = "Cambiar mi contraseña", description = "Requiere la contraseña actual.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Contraseña actualizada"),
+            @ApiResponse(responseCode = "400", description = "Contraseña actual incorrecta o nueva inválida",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Token ausente, inválido o expirado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> cambiarPassword(@AuthenticationPrincipal Jwt jwt,
+                                                @Valid @RequestBody PasswordCambiarRequest request) {
+        authService.cambiarPassword(jwt.getSubject(), request);
+        return ResponseEntity.noContent().build();
     }
 }

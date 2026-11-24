@@ -18,12 +18,12 @@ export const routes: Routes = [
         title: 'Inicio | Biblioteca Sebana',
         loadComponent: () => import('./features/inicio/inicio').then((m) => m.Inicio),
       },
+      {
+        path: 'usuarios',
+        canActivate: [rolGuard('ADMIN')],
+        loadChildren: () => import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
+      },
     ],
-  },
-  {
-    path: 'usuarios',
-    canActivate: [rolGuard('ADMIN')],
-    loadChildren: () => import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
   },
   { path: '**', redirectTo: '' },
 ];

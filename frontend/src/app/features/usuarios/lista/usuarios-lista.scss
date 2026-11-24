@@ -42,8 +42,10 @@
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--linea);
 
+  input,
   select {
     width: 100%;
+    height: 2.5rem;
   }
 }
 
@@ -62,7 +64,6 @@
   }
 
   input {
-    width: 100%;
     padding-left: 2.25rem;
   }
 }
@@ -249,6 +250,11 @@ td.acciones {
   &:disabled {
     opacity: 0.5;
     cursor: progress;
+  }
+
+  // Ocupa el lugar de "Desactivar" en tu propia fila para que las acciones queden alineadas
+  &.reservado {
+    visibility: hidden;
   }
 }
 

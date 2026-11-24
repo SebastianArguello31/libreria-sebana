@@ -86,6 +86,8 @@
                           (click)="cambiarEstado(u)">
                     {{ u.activo ? 'Desactivar' : 'Activar' }}
                   </button>
+                } @else {
+                  <span class="accion reservado" aria-hidden="true">Desactivar</span>
                 }
               </td>
             </tr>

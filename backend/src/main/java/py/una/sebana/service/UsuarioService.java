@@ -15,7 +15,7 @@ import py.una.sebana.exception.RecursoNoEncontradoException;
 import py.una.sebana.repository.RolRepository;
 import py.una.sebana.repository.UsuarioRepository;
 import py.una.sebana.repository.UsuarioSpecs;
-import py.una.sebana.dto.PasswordRestablecerRequest
+import py.una.sebana.dto.PasswordRestablecerRequest;
 
 import java.util.Locale;
 

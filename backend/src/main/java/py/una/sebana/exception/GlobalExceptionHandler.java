@@ -92,4 +92,9 @@ public class GlobalExceptionHandler {
         ErrorResponse body = ErrorResponse.of(status.value(), status.getReasonPhrase(), mensaje, request.getRequestURI());
         return ResponseEntity.status(status).body(body);
     }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> ordenInvalido(PropertyReferenceException ex, HttpServletRequest request) {
+        return respuesta(HttpStatus.BAD_REQUEST, "No se puede ordenar por '" + ex.getPropertyName() + "'", request);
+    }
 }

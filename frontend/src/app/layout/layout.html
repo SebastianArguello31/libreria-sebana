@@ -1,0 +1,20 @@
+<header class="barra">
+  <a routerLink="/" class="marca">Biblioteca Sebana</a>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+    @if (esAdmin()) {
+      <a routerLink="/usuarios" routerLinkActive="activo">Usuarios</a>
+    }
+    <a routerLink="/mi-cuenta" routerLinkActive="activo">Mi cuenta</a>
+  </nav>
+
+  <div class="sesion">
+    <span>{{ usuario()?.nombreCompleto }}</span>
+    <button type="button" class="secundario" (click)="salir()">Salir</button>
+  </div>
+</header>
+
+<main class="contenedor">
+  <router-outlet />
+</main>

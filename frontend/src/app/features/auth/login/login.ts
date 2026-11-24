@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { mensajeDeError } from '../../../core/utils/errores';
@@ -14,8 +15,10 @@ import { mensajeDeError } from '../../../core/utils/errores';
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
 
-  readonly usuario = this.auth.usuario;
+  readonly returnUrl = input<string>();
+
   readonly cargando = signal(false);
   readonly error = signal<string | null>(null);
   readonly form = this.fb.nonNullable.group({
@@ -36,17 +39,19 @@ export class Login {
       .login(this.form.getRawValue())
       .pipe(finalize(() => this.cargando.set(false)))
       .subscribe({
-        next: () => this.form.reset(),
+        next: () => this.router.navigateByUrl(this.destinoSeguro()),
         error: (err: HttpErrorResponse) => this.error.set(mensajeDeError(err)),
       });
-  }
-
-  cerrarSesion(): void {
-    this.auth.logout();
   }
 
   campoInvalido(campo: 'email' | 'password'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
+  }
+
+  private destinoSeguro(): string {
+    const url = this.returnUrl();
+    // Solo rutas internas: evita redirecciones a otro sitio con ?returnUrl=//sitio-malicioso.com
+    return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
   }
 }

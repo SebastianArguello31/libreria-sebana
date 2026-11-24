@@ -92,3 +92,21 @@ tr.inactivo td {
 .ayuda {
   color: var(--tinta-suave);
 }
+
+.alerta.exito {
+  margin: 0 0 1rem;
+}
+
+td.acciones {
+  text-align: right;
+
+  a {
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

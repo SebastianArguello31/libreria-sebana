@@ -1,0 +1,59 @@
+.encabezado {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: normal;
+  }
+}
+
+.volver {
+  color: var(--verde);
+  font-size: 0.9rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.tarjeta {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 2rem;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.nota {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.alerta {
+  margin: 0;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.ayuda {
+  color: var(--tinta-suave);
+}

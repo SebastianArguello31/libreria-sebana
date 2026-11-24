@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Subject, catchError, debounceTime, of, switchMap, tap } from 'rxjs';
 import { Rol, Usuario } from '../../../core/models/auth.models';
 import { Pagina } from '../../../core/models/pagina.models';
@@ -14,7 +15,7 @@ const TAMANIO_PAGINA = 10;
 
 @Component({
   selector: 'app-usuarios-lista',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, RouterLink],
   templateUrl: './usuarios-lista.html',
   styleUrl: './usuarios-lista.scss',
 })
@@ -28,6 +29,7 @@ export class UsuariosLista {
   readonly resultado = signal<Pagina<Usuario> | null>(null);
   readonly cargando = signal(false);
   readonly error = signal<string | null>(null);
+  readonly aviso = signal<string | null>(history.state?.mensaje ?? null);
 
   readonly form = this.fb.nonNullable.group({
     texto: [''],

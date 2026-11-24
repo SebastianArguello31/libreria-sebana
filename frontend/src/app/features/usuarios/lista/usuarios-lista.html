@@ -1,6 +1,11 @@
 <header class="encabezado">
   <h1>Usuarios</h1>
+  <button type="button" routerLink="/usuarios/nuevo">Nuevo usuario</button>
 </header>
+
+@if (aviso(); as mensaje) {
+  <p class="alerta exito" role="status">{{ mensaje }}</p>
+}
 
 <form class="filtros" [formGroup]="form">
   <div class="campo">
@@ -38,6 +43,7 @@
       <th>Rol</th>
       <th>Estado</th>
       <th>Alta</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -50,10 +56,13 @@
             <span class="estado" [class.activo]="u.activo">{{ u.activo ? 'Activo' : 'Inactivo' }}</span>
           </td>
           <td>{{ u.creadoEn | date: 'dd/MM/yyyy' }}</td>
+          <td class="acciones">
+            <a [routerLink]="['/usuarios', u.id]">Editar</a>
+          </td>
         </tr>
       } @empty {
         <tr>
-          <td colspan="5" class="vacio">No hay usuarios que coincidan con los filtros.</td>
+          <td colspan="6" class="vacio">No hay usuarios que coincidan con los filtros.</td>
         </tr>
       }
     </tbody>

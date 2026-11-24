@@ -58,6 +58,18 @@
           <td>{{ u.creadoEn | date: 'dd/MM/yyyy' }}</td>
           <td class="acciones">
             <a [routerLink]="['/usuarios', u.id]">Editar</a>
+            <button type="button" class="enlace"
+                    [disabled]="procesando() === u.id"
+                    (click)="abrirPassword(u)">
+              Contraseña
+            </button>
+            @if (u.id !== idActual()) {
+              <button type="button" class="enlace" [class.peligro]="u.activo"
+                      [disabled]="procesando() === u.id"
+                      (click)="cambiarEstado(u)">
+                {{ u.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+            }
           </td>
         </tr>
       } @empty {
@@ -86,3 +98,30 @@
 } @else if (cargando()) {
   <p class="ayuda">Cargando usuarios…</p>
 }
+
+<dialog #dialogoPassword class="dialogo" (close)="usuarioPassword.set(null)">
+  @if (usuarioPassword(); as u) {
+    <form [formGroup]="passwordForm" (ngSubmit)="guardarPassword()" novalidate>
+      <h2>Restablecer contraseña</h2>
+      <p class="ayuda">Nueva contraseña para {{ u.nombreCompleto }} ({{ u.email }}).</p>
+
+      <label for="nuevaPassword">Nueva contraseña</label>
+      <input id="nuevaPassword" type="password" formControlName="password" autocomplete="new-password"
+             [class.invalido]="passwordInvalida()" />
+      @if (passwordInvalida()) {
+        <small class="error-campo">Debe tener entre 8 y 72 caracteres.</small>
+      }
+
+      @if (errorPassword(); as mensaje) {
+        <p class="alerta" role="alert">{{ mensaje }}</p>
+      }
+
+      <div class="botones">
+        <button type="button" class="secundario" (click)="cerrarPassword()">Cancelar</button>
+        <button type="submit" [disabled]="procesando() === u.id">
+          {{ procesando() === u.id ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</dialog>

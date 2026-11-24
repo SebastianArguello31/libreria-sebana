@@ -110,3 +110,62 @@ td.acciones {
     }
   }
 }
+
+td.acciones {
+  text-align: right;
+  white-space: nowrap;
+
+  a,
+  button.enlace {
+    margin-left: 0.9rem;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover:not(:disabled) {
+      background: none;
+      text-decoration: underline;
+    }
+  }
+
+  button.enlace.peligro {
+    color: var(--error);
+  }
+}
+
+.dialogo {
+  width: min(420px, 90vw);
+  padding: 2rem;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+
+  &::backdrop {
+    background: rgb(27 27 27 / 40%);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: normal;
+  }
+
+  .ayuda {
+    margin: 0.4rem 0 1.25rem;
+  }
+
+  .botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+}

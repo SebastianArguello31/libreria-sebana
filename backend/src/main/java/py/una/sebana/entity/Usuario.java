@@ -26,6 +26,7 @@ public class Usuario {
     @Column(nullable = false)
     private boolean activo = true;
 
+    @org.hibernate.annotations.Generated
     @Column(name = "creado_en", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime creadoEn;
 

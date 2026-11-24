@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorResponse } from '../../../core/models/auth.models';
+import { mensajeDeError } from '../../../core/utils/errores';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +37,7 @@ export class Login {
       .pipe(finalize(() => this.cargando.set(false)))
       .subscribe({
         next: () => this.form.reset(),
-        error: (err: HttpErrorResponse) => this.error.set(this.mensajeDeError(err)),
+        error: (err: HttpErrorResponse) => this.error.set(mensajeDeError(err)),
       });
   }
 
@@ -48,16 +48,5 @@ export class Login {
   campoInvalido(campo: 'email' | 'password'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
-  }
-
-  private mensajeDeError(err: HttpErrorResponse): string {
-    if (err.status === 0) {
-      return 'No se pudo conectar con el servidor. Verificá que la API esté en ejecución.';
-    }
-    const body = err.error as ErrorResponse | null;
-    if (err.status === 400 && body?.campos) {
-      return Object.values(body.campos).join('. ');
-    }
-    return body?.mensaje ?? 'Ocurrió un error inesperado. Intentá de nuevo.';
   }
 }

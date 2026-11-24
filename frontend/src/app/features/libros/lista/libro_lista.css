@@ -1,0 +1,260 @@
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+.subtitulo {
+  margin: 0.3rem 0 0;
+  color: var(--tinta-suave);
+  font-size: 0.95rem;
+}
+
+.nuevo {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--verde);
+  border-radius: 8px;
+  background: var(--verde);
+  color: var(--papel);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nuevo:hover {
+  background: var(--verde-claro);
+}
+
+.panel {
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+.filtros input,
+.filtros select {
+  width: 100%;
+  height: 2.5rem;
+}
+
+.buscador {
+  position: relative;
+}
+
+.buscador svg {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  width: 1rem;
+  height: 1rem;
+  transform: translateY(-50%);
+  color: var(--tinta-suave);
+  pointer-events: none;
+}
+
+.buscador input {
+  padding-left: 2.25rem;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  transition: opacity 0.15s;
+}
+
+table.cargando {
+  opacity: 0.55;
+}
+
+th {
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--linea);
+  background: var(--papel);
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+td {
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid #ebe6dd;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: #fbfaf7;
+}
+
+tr.inactivo .avatar {
+  opacity: 0.45;
+}
+
+tr.inactivo .nombre {
+  color: var(--tinta-suave);
+}
+
+.persona {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: #e7efe9;
+  color: var(--verde);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.nombre {
+  display: block;
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+.editorial {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.estado::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #b5ada0;
+}
+
+.estado.activo {
+  color: var(--verde);
+}
+
+.estado.activo::before {
+  background: #3f8f63;
+}
+
+td.acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.accion {
+  display: inline-block;
+  margin-left: 0.15rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: var(--verde);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.accion:hover:not(:disabled) {
+  border-color: var(--linea);
+  background: var(--papel);
+}
+
+.accion.peligro {
+  color: var(--error);
+}
+
+.accion:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 3rem 1rem;
+  color: var(--tinta-suave);
+}
+
+.vacio strong {
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+.pie {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--linea);
+  background: var(--papel);
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+}

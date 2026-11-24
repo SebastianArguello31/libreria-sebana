@@ -21,9 +21,16 @@ export const routes: Routes = [
       {
         path: 'usuarios',
         canActivate: [rolGuard('ADMIN')],
-        loadChildren: () => import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
+        loadChildren: () =>
+          import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
+      },
+      {
+        path: 'libros',
+        canActivate: [rolGuard('ADMIN')],
+        loadChildren: () => import('./features/libros/libros.routes').then((m) => m.LIBROS_ROUTES),
       },
     ],
   },
+
   { path: '**', redirectTo: '' },
 ];

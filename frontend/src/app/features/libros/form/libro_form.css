@@ -1,0 +1,125 @@
+.migas {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.migas a {
+  color: var(--verde);
+  text-decoration: none;
+}
+
+.migas a:hover {
+  text-decoration: underline;
+}
+
+.encabezado {
+  margin-bottom: 1.5rem;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+.subtitulo {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: var(--tinta-suave);
+}
+
+.tarjeta {
+  max-width: 860px;
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.seccion {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid #ebe6dd;
+}
+
+.seccion-titulo h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.seccion-titulo p {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--tinta-suave);
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+  min-width: 0;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.campo input,
+.campo textarea {
+  width: 100%;
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.nota {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.1rem 2rem;
+  background: var(--papel);
+}
+
+.ayuda {
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 720px) {
+  .seccion {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .campos {
+    grid-template-columns: 1fr;
+  }
+
+  .campo-completo {
+    grid-column: auto;
+  }
+
+  .acciones {
+    padding: 1rem 1.5rem;
+  }
+}

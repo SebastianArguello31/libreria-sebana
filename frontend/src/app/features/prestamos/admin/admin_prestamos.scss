@@ -1,0 +1,174 @@
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: normal;
+  }
+}
+
+.subtitulo,
+.ayuda,
+.secundario-texto {
+  color: var(--tinta-suave);
+}
+
+.subtitulo {
+  margin: 0.3rem 0 0;
+}
+
+.formulario {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+
+  h2 {
+    margin: 0 0 0.5rem;
+    font-family: var(--serif);
+    font-weight: normal;
+  }
+
+  select,
+  input {
+    width: 100%;
+    max-width: 35rem;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.filtros {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+
+  .seleccionado {
+    background: var(--verde);
+    color: var(--papel);
+  }
+}
+
+.panel {
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--linea);
+  background: var(--papel);
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #ebe6dd;
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.secundario-texto {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.estado {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--papel);
+  color: var(--tinta-suave);
+  font-size: 0.8rem;
+
+  &.prestado {
+    background: #e7efe9;
+    color: var(--verde);
+  }
+}
+
+.acciones-celda {
+  white-space: nowrap;
+}
+
+.accion {
+  margin: 0.1rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--verde);
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--linea);
+    background: var(--papel);
+  }
+
+  &.peligro {
+    color: var(--error);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.form-renovacion {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+
+  input {
+    width: 8rem;
+    margin-top: 0.4rem;
+  }
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.vacio {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 800px) {
+  .encabezado,
+  .form-renovacion {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

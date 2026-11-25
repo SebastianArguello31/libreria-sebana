@@ -1,0 +1,145 @@
+<section>
+  <header class="encabezado">
+    <div>
+      <h1>Mis préstamos</h1>
+      <p class="subtitulo">Consultá tus préstamos actuales y anteriores.</p>
+    </div>
+  </header>
+
+  <div class="pestanas">
+    <button
+      type="button"
+      class="pestana"
+      [class.activa]="vista() === 'actuales'"
+      (click)="cambiarVista('actuales')"
+    >
+      Actuales ({{ actuales().length }})
+    </button>
+
+    <button
+      type="button"
+      class="pestana"
+      [class.activa]="vista() === 'historial'"
+      (click)="cambiarVista('historial')"
+    >
+      Historial ({{ historial().length }})
+    </button>
+  </div>
+
+  @if (aviso()) {
+    <p class="alerta exito" role="status">{{ aviso() }}</p>
+  }
+
+  @if (error()) {
+    <p class="alerta" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando préstamos...</p>
+  } @else if (prestamosVisibles().length === 0) {
+    <div class="panel vacio">
+      <strong>
+        {{ vista() === 'actuales'
+        ? 'No tenés préstamos activos.'
+        : 'Todavía no tenés préstamos en el historial.' }}
+      </strong>
+      @if (vista() === 'actuales') {
+        <span>Cuando solicites un libro disponible, aparecerá aquí.</span>
+      }
+    </div>
+  } @else {
+    <section class="lista-prestamos">
+      @for (prestamo of prestamosVisibles(); track prestamo.id) {
+        <article class="prestamo">
+          <div class="prestamo-info">
+            <div>
+              <h2>{{ prestamo.tituloLibro }}</h2>
+              @if (prestamo.isbnLibro) {
+                <p class="isbn">ISBN {{ prestamo.isbnLibro }}</p>
+              }
+            </div>
+
+            @if (vista() === 'actuales') {
+              <span class="estado prestado">En préstamo</span>
+            } @else {
+              <span class="estado">{{ etiquetaEstado(prestamo.estado) }}</span>
+            }
+          </div>
+
+          <dl class="fechas">
+            <div>
+              <dt>Préstamo</dt>
+              <dd>{{ prestamo.fechaPrestamo | date:'dd/MM/yyyy':'UTC' }}</dd>
+            </div>
+            <div>
+              <dt>Vencimiento</dt>
+              <dd>{{ prestamo.fechaVencimiento | date:'dd/MM/yyyy':'UTC' }}</dd>
+            </div>
+            @if (prestamo.fechaDevolucion) {
+              <div>
+                <dt>Devolución</dt>
+                <dd>{{ prestamo.fechaDevolucion | date:'dd/MM/yyyy':'UTC' }}</dd>
+              </div>
+            }
+            <div>
+              <dt>Duración</dt>
+              <dd>{{ prestamo.duracionDias }} días</dd>
+            </div>
+          </dl>
+
+          @if (vista() === 'actuales' && prestamo.duracionDias < 30) {
+            <button
+              type="button"
+              class="secundario"
+              [disabled]="renovandoId() !== null"
+              (click)="iniciarRenovacion(prestamo)"
+            >
+              Renovar
+            </button>
+          }
+
+          @if (vista() === 'actuales' && prestamoSeleccionado()?.id === prestamo.id) {
+            <form class="form-renovacion" [formGroup]="form" (ngSubmit)="renovar()">
+              <div>
+                <label [for]="'duracion-' + prestamo.id">
+                  Nueva duración total (días)
+                </label>
+                <p class="ayuda">
+                  Desde la fecha original del préstamo. Máximo: 30 días.
+                </p>
+                <input
+                  [id]="'duracion-' + prestamo.id"
+                  type="number"
+                  min="7"
+                  max="30"
+                  formControlName="duracionTotalDias"
+                />
+                @if (duracionNoAumenta(prestamo)) {
+                  <p class="error-campo">
+                    La duración nueva debe superar los {{ prestamo.duracionDias }} días actuales.
+                  </p>
+                }
+              </div>
+
+              <div class="acciones">
+                <button
+                  type="button"
+                  class="secundario"
+                  (click)="cancelarRenovacion()"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  [disabled]="renovandoId() === prestamo.id"
+                >
+                  {{ renovandoId() === prestamo.id ? 'Renovando...' : 'Confirmar renovación' }}
+                </button>
+              </div>
+            </form>
+          }
+        </article>
+      }
+    </section>
+  }
+</section>

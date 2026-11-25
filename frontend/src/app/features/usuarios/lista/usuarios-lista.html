@@ -3,7 +3,7 @@
     <h1>Usuarios</h1>
     <p class="subtitulo">Cuentas de socios lectores y administradores de la biblioteca.</p>
   </div>
-  <button type="button" class="nuevo" routerLink="/usuarios/nuevo">+ Nuevo usuario</button>
+  <button type="button" class="nuevo" routerLink="/admin/usuarios/nuevo">+ Nuevo usuario</button>
 </header>
 
 @if (aviso(); as mensaje) {
@@ -74,7 +74,7 @@
               </td>
               <td class="fecha">{{ u.creadoEn | date: 'dd/MM/yyyy' }}</td>
               <td class="acciones">
-                <a class="accion" [routerLink]="['/usuarios', u.id]">Editar</a>
+                <a class="accion" [routerLink]="['/admin/usuarios', u.id]">Editar</a>
                 <button type="button" class="accion"
                         [disabled]="procesando() === u.id"
                         (click)="abrirPassword(u)">

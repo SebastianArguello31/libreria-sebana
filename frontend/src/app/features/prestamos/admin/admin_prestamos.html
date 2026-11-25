@@ -1,0 +1,203 @@
+<section>
+  <header class="encabezado">
+    <div>
+      <h1>Gestión de préstamos</h1>
+      <p class="subtitulo">Registrá préstamos presenciales y gestioná devoluciones.</p>
+    </div>
+
+    <button type="button" (click)="mostrandoRegistro.set(!mostrandoRegistro())">
+      {{ mostrandoRegistro() ? 'Cerrar formulario' : '+ Registrar préstamo' }}
+    </button>
+  </header>
+
+  @if (mostrandoRegistro()) {
+    <form class="panel formulario" [formGroup]="formRegistro" (ngSubmit)="registrarPresencial()">
+      <h2>Registrar préstamo presencial</h2>
+
+      <label for="usuarioId">Lector</label>
+      <select id="usuarioId" formControlName="usuarioId">
+        <option value="">Seleccioná un lector</option>
+        @for (usuario of usuarios(); track usuario.id) {
+          <option [value]="usuario.id">
+            {{ usuario.nombreCompleto }} — {{ usuario.email }}
+          </option>
+        }
+      </select>
+
+      <label for="libroId">Libro disponible</label>
+      <select id="libroId" formControlName="libroId">
+        <option value="">Seleccioná un libro</option>
+        @for (libro of librosDisponibles(); track libro.id) {
+          <option [value]="libro.id">
+            {{ libro.titulo }} — {{ libro.stock }} disponible(s)
+          </option>
+        }
+      </select>
+
+      <label for="duracionDias">Duración en días</label>
+      <input
+        id="duracionDias"
+        type="number"
+        min="7"
+        max="30"
+        formControlName="duracionDias"
+      />
+
+      @if (usuarios().length === 0) {
+        <p class="ayuda">No hay lectores activos para seleccionar.</p>
+      }
+      @if (librosDisponibles().length === 0) {
+        <p class="ayuda">No hay libros disponibles para prestar.</p>
+      }
+
+      <div class="acciones">
+        <button type="submit" [disabled]="procesandoRegistro()">
+          {{ procesandoRegistro() ? 'Registrando...' : 'Registrar' }}
+        </button>
+      </div>
+    </form>
+  }
+
+  @if (aviso()) {
+    <p class="alerta exito" role="status">{{ aviso() }}</p>
+  }
+  @if (error()) {
+    <p class="alerta" role="alert">{{ error() }}</p>
+  }
+
+  <div class="filtros">
+    <button
+      type="button"
+      class="secundario"
+      [class.seleccionado]="filtro() === 'activos'"
+      (click)="cambiarFiltro('activos')"
+    >
+      Activos
+    </button>
+    <button
+      type="button"
+      class="secundario"
+      [class.seleccionado]="filtro() === 'historial'"
+      (click)="cambiarFiltro('historial')"
+    >
+      Historial
+    </button>
+    <button
+      type="button"
+      class="secundario"
+      [class.seleccionado]="filtro() === 'todos'"
+      (click)="cambiarFiltro('todos')"
+    >
+      Todos
+    </button>
+  </div>
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando préstamos...</p>
+  } @else {
+    <div class="panel tabla-scroll">
+      <table>
+        <thead>
+        <tr>
+          <th>Lector</th>
+          <th>Libro</th>
+          <th>Préstamo / vencimiento</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (prestamo of prestamosVisibles(); track prestamo.id) {
+            <tr>
+              <td>
+                <strong>{{ prestamo.nombreUsuario }}</strong>
+                <span class="secundario-texto">{{ prestamo.emailUsuario }}</span>
+              </td>
+              <td>{{ prestamo.tituloLibro }}</td>
+              <td>
+                {{ prestamo.fechaPrestamo | date:'dd/MM/yyyy':'UTC' }}
+                <span class="secundario-texto">
+                  vence {{ prestamo.fechaVencimiento | date:'dd/MM/yyyy':'UTC' }}
+                </span>
+              </td>
+              <td>
+                <span class="estado" [class.prestado]="prestamo.estado === 'PRESTADO'">
+                  {{ etiquetaEstado(prestamo.estado) }}
+                </span>
+              </td>
+              <td class="acciones-celda">
+                @if (prestamo.estado === 'PRESTADO') {
+                  <button
+                    type="button"
+                    class="accion"
+                    [disabled]="prestamo.duracionDias >= 30 || procesandoId() !== null"
+                    (click)="iniciarRenovacion(prestamo)"
+                  >
+                    Renovar
+                  </button>
+                  <button
+                    type="button"
+                    class="accion"
+                    [disabled]="procesandoId() === prestamo.id"
+                    (click)="devolver(prestamo)"
+                  >
+                    Devolver
+                  </button>
+                  <button
+                    type="button"
+                    class="accion peligro"
+                    [disabled]="procesandoId() === prestamo.id"
+                    (click)="anular(prestamo)"
+                  >
+                    Anular
+                  </button>
+                }
+              </td>
+            </tr>
+
+            @if (prestamoRenovacion()?.id === prestamo.id) {
+              <tr>
+                <td colspan="5">
+                  <form class="form-renovacion" [formGroup]="formRenovacion" (ngSubmit)="renovar()">
+                    <div>
+                      <label [for]="'renovacion-' + prestamo.id">
+                        Nueva duración total desde el préstamo original
+                      </label>
+                      <p class="ayuda">Debe superar {{ prestamo.duracionDias }} y no pasar de 30 días.</p>
+                      <input
+                        [id]="'renovacion-' + prestamo.id"
+                        type="number"
+                        min="7"
+                        max="30"
+                        formControlName="duracionTotalDias"
+                      />
+                      @if (duracionRenovacionInvalida(prestamo)) {
+                        <p class="error-campo">
+                          La duración nueva debe superar la actual.
+                        </p>
+                      }
+                    </div>
+                    <div class="acciones">
+                      <button type="button" class="secundario" (click)="prestamoRenovacion.set(null)">
+                        Cancelar
+                      </button>
+                      <button type="submit" [disabled]="procesandoId() === prestamo.id">
+                        Confirmar renovación
+                      </button>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            }
+          } @empty {
+            <tr>
+              <td colspan="5" class="vacio">
+                No hay préstamos para mostrar en este filtro.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

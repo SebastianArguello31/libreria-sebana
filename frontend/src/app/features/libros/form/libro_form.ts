@@ -103,7 +103,7 @@ export class LibroForm implements OnInit {
       next: () => {
         const mensaje = this.esEdicion() ? 'Libro actualizado.' : 'Libro creado.';
 
-        this.router.navigate(['/libros'], { state: { mensaje } });
+        this.router.navigate(['/admin/libros'], { state: { mensaje } });
       },
       error: (err: HttpErrorResponse) => {
         const campos = erroresDeCampos(err);

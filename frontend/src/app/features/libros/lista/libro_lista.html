@@ -4,7 +4,7 @@
     <p class="subtitulo">Catálogo de libros de la biblioteca.</p>
   </div>
 
-  <a class="nuevo" routerLink="/libros/nuevo">+ Nuevo libro</a>
+  <a class="nuevo" routerLink="/admin/libros/nuevo">+ Nuevo libro</a>
 </header>
 
 @if (aviso(); as mensaje) {
@@ -89,7 +89,7 @@
             </td>
 
             <td class="acciones">
-              <a class="accion" [routerLink]="['/libros', libro.id]">
+              <a class="accion" [routerLink]="['/admin/libros', libro.id]">
                 Editar
               </a>
 

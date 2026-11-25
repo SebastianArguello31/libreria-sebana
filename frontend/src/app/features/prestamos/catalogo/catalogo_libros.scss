@@ -1,0 +1,91 @@
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: normal;
+  }
+}
+
+.subtitulo {
+  margin: 0.3rem 0 0;
+  color: var(--tinta-suave);
+}
+
+.duracion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  background: #fff;
+
+  input {
+    width: 7rem;
+  }
+}
+
+.ayuda {
+  margin: 0.3rem 0 0;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+}
+
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.libro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 210px;
+  padding: 1.25rem;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: normal;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+.autor {
+  margin: 0.4rem 0 0;
+  color: var(--tinta-suave);
+}
+
+.disponibilidad {
+  margin: 0;
+  color: var(--verde);
+  font-size: 0.9rem;
+
+  &.sin-stock {
+    color: var(--error);
+  }
+}
+
+@media (max-width: 600px) {
+  .duracion {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

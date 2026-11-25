@@ -19,18 +19,45 @@ export const routes: Routes = [
         loadComponent: () => import('./features/inicio/inicio').then((m) => m.Inicio),
       },
       {
-        path: 'usuarios',
-        canActivate: [rolGuard('ADMIN')],
-        loadChildren: () =>
-          import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
+        path: 'catalogo',
+        title: 'Catálogo | Biblioteca Sebana',
+        loadComponent: () =>
+          import('./features/prestamos/catalogo/catalogo_libros').then((m) => m.CatalogoLibros),
       },
       {
-        path: 'libros',
+        path: 'mis-prestamos',
+        title: 'Mis préstamos | Biblioteca Sebana',
+        canActivate: [rolGuard('USUARIO')],
+        loadComponent: () =>
+          import('./features/prestamos/mis-prestamos/mis_prestamos').then((m) => m.MisPrestamos),
+      },
+      {
+        path: 'admin',
         canActivate: [rolGuard('ADMIN')],
-        loadChildren: () => import('./features/libros/libros.routes').then((m) => m.LIBROS_ROUTES),
+        children: [
+          {
+            path: 'usuarios',
+            loadChildren: () =>
+              import('./features/usuarios/usuarios.routes').then((m) => m.USUARIOS_ROUTES),
+          },
+          {
+            path: 'prestamos',
+            title: 'Gestión de préstamos | Biblioteca Sebana',
+            loadComponent: () =>
+              import('./features/prestamos/admin/admin_prestamos').then((m) => m.AdminPrestamos),
+          },
+          {
+            path: 'libros',
+            title: 'Libros | Biblioteca Sebana',
+            loadChildren: () =>
+              import('./features/libros/libros.routes').then((m) => m.LIBROS_ROUTES),
+          },
+        ],
       },
     ],
   },
-
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

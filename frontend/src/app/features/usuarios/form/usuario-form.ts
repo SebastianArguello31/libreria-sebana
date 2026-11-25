@@ -99,7 +99,7 @@ export class UsuarioForm implements OnInit {
 
     peticion.pipe(finalize(() => this.guardando.set(false))).subscribe({
       next: () =>
-        this.router.navigate(['/usuarios'], {
+        this.router.navigate(['/admin/usuarios'], {
           state: { mensaje: this.esEdicion() ? 'Usuario actualizado.' : 'Usuario creado.' },
         }),
       error: (err: HttpErrorResponse) => {

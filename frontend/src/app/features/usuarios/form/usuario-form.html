@@ -1,5 +1,5 @@
 <nav class="migas" aria-label="Ruta">
-  <a routerLink="/usuarios">Usuarios</a>
+  <a routerLink="/admin/usuarios">Usuarios</a>
   <span aria-hidden="true">/</span>
   <span>{{ esEdicion() ? 'Editar' : 'Nuevo' }}</span>
 </nav>
@@ -107,7 +107,7 @@
     }
 
     <footer class="acciones">
-      <button type="button" class="secundario" routerLink="/usuarios">Cancelar</button>
+      <button type="button" class="secundario" routerLink="/admin/usuarios">Cancelar</button>
       <button type="submit" [disabled]="guardando()">
         @if (guardando()) {
           Guardando…

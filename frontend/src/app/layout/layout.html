@@ -4,9 +4,13 @@
   <nav>
     <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
     @if (esAdmin()) {
-      <a routerLink="/usuarios" routerLinkActive="activo">Usuarios</a>
+      <a routerLink="/admin/usuarios" routerLinkActive="activo">Usuarios</a>
+      <a routerLink="/admin/prestamos" routerLinkActive="activo">Préstamos</a>
+      <a routerLink="/admin/libros" routerLinkActive="activo">Libros</a>
+    } @else {
+      <a routerLink="/mis-prestamos" routerLinkActive="activo">Mis préstamos</a>
     }
-    <a routerLink="/mi-cuenta" routerLinkActive="activo">Mi cuenta</a>
+    <a routerLink="/catalogo" routerLinkActive="activo">Catálogo</a>
   </nav>
 
   <div class="sesion">

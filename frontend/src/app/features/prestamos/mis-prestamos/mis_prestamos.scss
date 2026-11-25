@@ -1,0 +1,153 @@
+.encabezado {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: normal;
+  }
+}
+
+.subtitulo {
+  margin: 0.3rem 0 0;
+  color: var(--tinta-suave);
+}
+
+.pestanas {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+.pestana {
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--tinta-suave);
+
+  &:hover {
+    background: rgb(30 58 47 / 6%);
+    color: var(--verde);
+  }
+
+  &.activa {
+    border-bottom-color: var(--verde);
+    color: var(--verde);
+  }
+}
+
+.lista-prestamos {
+  display: grid;
+  gap: 1rem;
+}
+
+.prestamo {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #fff;
+
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: normal;
+  }
+
+  .secundario {
+    justify-self: start;
+  }
+}
+
+.prestamo-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.isbn {
+  margin: 0.35rem 0 0;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+}
+
+.estado {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--papel);
+  color: var(--tinta-suave);
+  font-size: 0.8rem;
+
+  &.prestado {
+    background: #e7efe9;
+    color: var(--verde);
+  }
+}
+
+.fechas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 0;
+
+  div {
+    min-width: 7rem;
+  }
+
+  dt {
+    color: var(--tinta-suave);
+    font-size: 0.75rem;
+  }
+
+  dd {
+    margin: 0.25rem 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.form-renovacion {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linea);
+
+  input {
+    width: 8rem;
+    margin-top: 0.4rem;
+  }
+}
+
+.ayuda {
+  margin: 0.25rem 0 0;
+  color: var(--tinta-suave);
+  font-size: 0.82rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.6rem;
+}
+
+@media (max-width: 650px) {
+  .form-renovacion {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .acciones {
+    justify-content: flex-end;
+  }
+
+  .prestamo-info {
+    flex-direction: column;
+  }
+}

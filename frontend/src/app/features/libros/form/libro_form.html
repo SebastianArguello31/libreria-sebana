@@ -1,0 +1,147 @@
+<nav class="migas" aria-label="Ruta">
+  <a routerLink="/admin/libros">Libros</a>
+  <span aria-hidden="true">/</span>
+  <span>{{ esEdicion() ? 'Editar' : 'Nuevo' }}</span>
+</nav>
+
+<header class="encabezado">
+  <h1>{{ esEdicion() ? 'Editar libro' : 'Nuevo libro' }}</h1>
+  <p class="subtitulo">
+    @if (esEdicion()) {
+      Actualizá los datos del libro.
+    } @else {
+      Completá los datos para agregar un libro al catálogo.
+    }
+  </p>
+</header>
+
+@if (cargando()) {
+  <p class="ayuda">Cargando libro…</p>
+} @else if (cargaFallida()) {
+  <p class="alerta" role="alert">{{ error() }}</p>
+} @else {
+  <form class="tarjeta" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <section class="seccion">
+      <div class="seccion-titulo">
+        <h2>Datos del libro</h2>
+        <p>Título, autor y datos de publicación.</p>
+      </div>
+
+      <div class="campos">
+        <div class="campo">
+          <label for="titulo">Título</label>
+          <input
+            id="titulo"
+            type="text"
+            formControlName="titulo"
+            placeholder="Ej.: El principito"
+            [class.invalido]="errorDe('titulo')"
+          />
+          @if (errorDe('titulo'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="autor">Autor</label>
+          <input
+            id="autor"
+            type="text"
+            formControlName="autor"
+            placeholder="Ej.: Antoine de Saint-Exupéry"
+            [class.invalido]="errorDe('autor')"
+          />
+          @if (errorDe('autor'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="isbn">ISBN</label>
+          <input
+            id="isbn"
+            type="text"
+            formControlName="isbn"
+            placeholder="ISBN del libro"
+            [class.invalido]="errorDe('isbn')"
+          />
+          @if (errorDe('isbn'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="editorial">Editorial</label>
+          <input
+            id="editorial"
+            type="text"
+            formControlName="editorial"
+            placeholder="Editorial"
+            [class.invalido]="errorDe('editorial')"
+          />
+          @if (errorDe('editorial'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="anioPublicacion">Año de publicación</label>
+          <input
+            id="anioPublicacion"
+            type="number"
+            min="1"
+            max="32767"
+            formControlName="anioPublicacion"
+            placeholder="Ej.: 1943"
+            [class.invalido]="errorDe('anioPublicacion')"
+          />
+          @if (errorDe('anioPublicacion'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="stock">Stock</label>
+          <input
+            id="stock"
+            type="number"
+            min="0"
+            formControlName="stock"
+            [class.invalido]="errorDe('stock')"
+          />
+          @if (errorDe('stock'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+
+        <div class="campo campo-completo">
+          <label for="descripcion">Descripción</label>
+          <textarea
+            id="descripcion"
+            rows="4"
+            formControlName="descripcion"
+            placeholder="Descripción breve del libro"
+            [class.invalido]="errorDe('descripcion')">
+          </textarea>
+          @if (errorDe('descripcion'); as mensaje) {
+            <small class="error-campo">{{ mensaje }}</small>
+          }
+        </div>
+      </div>
+    </section>
+
+    @if (error(); as mensaje) {
+      <p class="alerta" role="alert">{{ mensaje }}</p>
+    }
+
+    <footer class="acciones">
+      <button type="button" class="secundario" routerLink="/admin/libros">
+        Cancelar
+      </button>
+
+      <button type="submit" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando…' : (esEdicion() ? 'Guardar cambios' : 'Crear libro') }}
+      </button>
+    </footer>
+  </form>
+}

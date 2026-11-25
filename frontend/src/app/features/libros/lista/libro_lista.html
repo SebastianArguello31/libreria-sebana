@@ -1,0 +1,129 @@
+<header class="encabezado">
+  <div>
+    <h1>Libros</h1>
+    <p class="subtitulo">Catálogo de libros de la biblioteca.</p>
+  </div>
+
+  <a class="nuevo" routerLink="/admin/libros/nuevo">+ Nuevo libro</a>
+</header>
+
+@if (aviso(); as mensaje) {
+  <p class="alerta exito" role="status">{{ mensaje }}</p>
+}
+
+@if (error(); as mensaje) {
+  <p class="alerta" role="alert">{{ mensaje }}</p>
+}
+
+<section class="panel">
+  <div class="filtros">
+    <div class="buscador">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" stroke-linecap="round" />
+      </svg>
+
+      <input
+        type="search"
+        placeholder="Buscar por título, autor o ISBN"
+        aria-label="Buscar libros"
+        [value]="busqueda()"
+        (input)="busqueda.set($any($event.target).value)"
+      />
+    </div>
+
+    <select
+      aria-label="Filtrar por estado"
+      [value]="estado()"
+      (change)="estado.set($any($event.target).value)">
+      <option value="todos">Todos los estados</option>
+      <option value="activos">Activos</option>
+      <option value="inactivos">Inactivos</option>
+    </select>
+  </div>
+
+  <div class="tabla-scroll">
+    <table [class.cargando]="cargando()">
+      <thead>
+      <tr>
+        <th>Libro</th>
+        <th>Autor</th>
+        <th>ISBN</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th><span class="sr-only">Acciones</span></th>
+      </tr>
+      </thead>
+
+      <tbody>
+        @for (libro of filtrados(); track libro.id) {
+          <tr [class.inactivo]="!libro.activo">
+            <td>
+              <div class="persona">
+                <span class="avatar" aria-hidden="true">
+                  {{ iniciales(libro.titulo) }}
+                </span>
+
+                <div>
+                  <span class="nombre">{{ libro.titulo }}</span>
+                  <span class="editorial">
+                    {{ libro.editorial || 'Sin editorial' }}
+                  </span>
+                </div>
+              </div>
+            </td>
+
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.isbn || '—' }}</td>
+            <td>{{ libro.stock }}</td>
+
+            <td>
+              <span class="estado" [class.activo]="libro.activo">
+                {{ libro.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+
+            <td class="acciones">
+              <a class="accion" [routerLink]="['/admin/libros', libro.id]">
+                Editar
+              </a>
+
+              @if (libro.activo) {
+                <button
+                  type="button"
+                  class="accion peligro"
+                  [disabled]="procesando() === libro.id"
+                  (click)="darDeBaja(libro)">
+                  Dar de baja
+                </button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6">
+              <div class="vacio">
+                @if (cargando()) {
+                  <strong>Cargando libros…</strong>
+                } @else {
+                  <strong>No se encontraron libros</strong>
+                  <span>Probá con otro texto o cambiá el filtro de estado.</span>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="pie">
+    {{ filtrados().length }}
+    {{ filtrados().length === 1 ? 'libro' : 'libros' }}
+  </footer>
+</section>

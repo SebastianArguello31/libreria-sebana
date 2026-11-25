@@ -1,0 +1,81 @@
+<section>
+  <header class="encabezado">
+    <div>
+      <h1>Catálogo de libros</h1>
+      <p class="subtitulo">Explorá los libros disponibles en la biblioteca.</p>
+    </div>
+  </header>
+
+  <form class="duracion" [formGroup]="form">
+    <div>
+      <label for="duracionDias">Duración del préstamo</label>
+      <p class="ayuda">Elegí entre 7 y 30 días.</p>
+    </div>
+
+    <div>
+      <input
+        id="duracionDias"
+        type="number"
+        min="7"
+        max="30"
+        formControlName="duracionDias"
+        [class.invalido]="duracionInvalida()"
+      />
+
+      @if (duracionInvalida()) {
+        <p class="error-campo">La duración debe estar entre 7 y 30 días.</p>
+      }
+    </div>
+  </form>
+
+  @if (aviso()) {
+    <p class="alerta exito" role="status">{{ aviso() }}</p>
+  }
+
+  @if (error()) {
+    <p class="alerta" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando catálogo...</p>
+  } @else if (libros().length === 0) {
+    <div class="panel vacio">
+      <strong>No hay libros activos en el catálogo.</strong>
+      <span>Volvé a consultar más tarde.</span>
+    </div>
+  } @else {
+    <section class="catalogo">
+      @for (libro of libros(); track libro.id) {
+        <article class="libro">
+          <div>
+            <h2>{{ libro.titulo }}</h2>
+            <p class="autor">{{ libro.autor }}</p>
+          </div>
+
+          <p
+            class="disponibilidad"
+            [class.sin-stock]="libro.stock === 0"
+          >
+            {{ libro.stock > 0
+            ? libro.stock + ' ejemplar(es) disponible(s)'
+            : 'Sin ejemplares disponibles' }}
+          </p>
+
+          <button
+            type="button"
+            [disabled]="libro.stock === 0 || solicitandoId() !== null"
+            (click)="solicitar(libro)"
+          >
+            @if (solicitandoId() === libro.id) {
+              Procesando...
+            } @else if (libro.stock === 0) {
+              No disponible
+            } @else {
+              Solicitar préstamo
+            }
+          </button>
+        </article>
+      }
+    </section>
+  }
+</section>

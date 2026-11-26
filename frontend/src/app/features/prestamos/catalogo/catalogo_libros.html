@@ -1,32 +1,18 @@
 <section>
   <header class="encabezado">
-    <div>
-      <h1>Catálogo de libros</h1>
-      <p class="subtitulo">Explorá los libros disponibles en la biblioteca.</p>
-    </div>
+    <h1>Explorá el catálogo</h1>
   </header>
 
-  <form class="duracion" [formGroup]="form">
-    <div>
-      <label for="duracionDias">Duración del préstamo</label>
-      <p class="ayuda">Elegí entre 7 y 30 días.</p>
-    </div>
-
-    <div>
-      <input
-        id="duracionDias"
-        type="number"
-        min="7"
-        max="30"
-        formControlName="duracionDias"
-        [class.invalido]="duracionInvalida()"
-      />
-
-      @if (duracionInvalida()) {
-        <p class="error-campo">La duración debe estar entre 7 y 30 días.</p>
-      }
-    </div>
-  </form>
+  <div class="buscador">
+    <label for="buscarLibro">Buscar libros</label>
+    <input
+      id="buscarLibro"
+      type="search"
+      placeholder="Título, autor o ISBN"
+      [value]="busqueda()"
+      (input)="busqueda.set($any($event.target).value)"
+    />
+  </div>
 
   @if (aviso()) {
     <p class="alerta exito" role="status">{{ aviso() }}</p>
@@ -37,43 +23,69 @@
   }
 
   @if (cargando()) {
-    <p class="cargando-texto">Cargando catálogo...</p>
+    <p class="cargando-texto">Cargando catálogo…</p>
   } @else if (libros().length === 0) {
-    <div class="panel vacio">
-      <strong>No hay libros activos en el catálogo.</strong>
-      <span>Volvé a consultar más tarde.</span>
-    </div>
+    @if (!error()) {
+      <p>No hay libros publicados en el catálogo.</p>
+    }
+  } @else if (librosVisibles().length === 0) {
+    <p>No encontramos libros con esa búsqueda.</p>
   } @else {
-    <section class="catalogo">
-      @for (libro of libros(); track libro.id) {
+    <section class="catalogo" aria-label="Libros del catálogo">
+      @for (libro of librosVisibles(); track libro.id) {
         <article class="libro">
           <div>
             <h2>{{ libro.titulo }}</h2>
             <p class="autor">{{ libro.autor }}</p>
           </div>
 
-          <p
-            class="disponibilidad"
-            [class.sin-stock]="libro.stock === 0"
-          >
-            {{ libro.stock > 0
-            ? libro.stock + ' ejemplar(es) disponible(s)'
-            : 'Sin ejemplares disponibles' }}
+          <p class="disponibilidad" [class.sin-stock]="libro.stock <= 0">
+            @if (libro.stock === 1) {
+              1 ejemplar disponible
+            } @else if (libro.stock > 1) {
+              {{ libro.stock }} ejemplares disponibles
+            } @else {
+              Sin ejemplares disponibles
+            }
           </p>
 
-          <button
-            type="button"
-            [disabled]="libro.stock === 0 || solicitandoId() !== null"
-            (click)="solicitar(libro)"
-          >
-            @if (solicitandoId() === libro.id) {
-              Procesando...
-            } @else if (libro.stock === 0) {
-              No disponible
-            } @else {
+          @if (libroSeleccionadoId() === libro.id && libro.stock > 0) {
+            <form class="duracion" [formGroup]="form" (ngSubmit)="solicitar(libro)">
+              <label [for]="'duracion-' + libro.id">Duración del préstamo</label>
+              <input
+                [id]="'duracion-' + libro.id"
+                type="number"
+                min="7"
+                max="30"
+                formControlName="duracionDias"
+              />
+              <small>De 7 a 30 días</small>
+
+              @if (duracionInvalida()) {
+                <p class="error-campo">Ingresá una duración entre 7 y 30 días.</p>
+              }
+
+              <button type="submit" [disabled]="solicitandoId() !== null">
+                {{ solicitandoId() === libro.id ? 'Procesando…' : 'Confirmar préstamo' }}
+              </button>
+              <button
+                type="button"
+                class="secundario"
+                [disabled]="solicitandoId() !== null"
+                (click)="libroSeleccionadoId.set(null)"
+              >
+                Cancelar
+              </button>
+            </form>
+          } @else if (libro.stock > 0 && !esAdmin()) {
+            <button
+              type="button"
+              [disabled]="solicitandoId() !== null"
+              (click)="elegirLibro(libro)"
+            >
               Solicitar préstamo
-            }
-          </button>
+            </button>
+          }
         </article>
       }
     </section>

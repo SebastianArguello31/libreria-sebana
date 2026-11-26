@@ -54,3 +54,22 @@ nav {
   margin: 0 auto;
   padding: 2rem;
 }
+
+.boton-login {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  background: var(--verde);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--verde);
+    outline-offset: 3px;
+  }
+}

@@ -17,19 +17,29 @@
   color: var(--tinta-suave);
 }
 
-.duracion {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--linea);
-  border-radius: 12px;
-  background: #fff;
+.buscador {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 32rem;
+  margin-bottom: 1.5rem;
 
   input {
-    width: 7rem;
+    width: 100%;
+  }
+}
+
+.duracion {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--linea);
+
+  input {
+    width: 100%;
+  }
+
+  small {
+    color: var(--tinta-suave);
   }
 }
 
@@ -48,9 +58,7 @@
 .libro {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 210px;
+  gap: 0.6rem;
   padding: 1.25rem;
   border: 1px solid var(--linea);
   border-radius: 14px;

@@ -7,15 +7,20 @@
       <a routerLink="/admin/usuarios" routerLinkActive="activo">Usuarios</a>
       <a routerLink="/admin/prestamos" routerLinkActive="activo">Préstamos</a>
       <a routerLink="/admin/libros" routerLinkActive="activo">Libros</a>
-    } @else {
+    } @else if (usuario()?.rol === 'USUARIO') {
       <a routerLink="/mis-prestamos" routerLinkActive="activo">Mis préstamos</a>
     }
-    <a routerLink="/catalogo" routerLinkActive="activo">Catálogo</a>
   </nav>
 
   <div class="sesion">
-    <span>{{ usuario()?.nombreCompleto }}</span>
-    <button type="button" class="secundario" (click)="salir()">Salir</button>
+    @if (usuario(); as cuenta) {
+      <span>{{ cuenta.nombreCompleto }}</span>
+      <button type="button" class="secundario" (click)="salir()">Salir</button>
+    } @else {
+      <a class="boton-login" routerLink="/login" [queryParams]="{ returnUrl: '/' }">
+        Iniciar sesión
+      </a>
+    }
   </div>
 </header>
 

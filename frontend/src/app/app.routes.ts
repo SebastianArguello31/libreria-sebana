@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard, rolGuard } from './core/guards/auth.guards';
+import { guestGuard, rolGuard } from './core/guards/auth.guards';
 
 export const routes: Routes = [
   {
@@ -10,19 +10,19 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [authGuard],
     loadComponent: () => import('./layout/layout').then((m) => m.Layout),
     children: [
       {
         path: '',
-        title: 'Inicio | Biblioteca Sebana',
-        loadComponent: () => import('./features/inicio/inicio').then((m) => m.Inicio),
-      },
-      {
-        path: 'catalogo',
+        pathMatch: 'full',
         title: 'Catálogo | Biblioteca Sebana',
         loadComponent: () =>
           import('./features/prestamos/catalogo/catalogo_libros').then((m) => m.CatalogoLibros),
+      },
+      {
+        path: 'catalogo',
+        pathMatch: 'full',
+        redirectTo: '',
       },
       {
         path: 'mis-prestamos',
